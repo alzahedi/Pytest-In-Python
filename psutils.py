@@ -38,7 +38,7 @@ class PS_Util:
         for p in children:
             try:
                 print('status', p.status())
-                if p.status() == psutil.STATUS_RUNNING:
+                if p.status() == psutil.STATUS_RUNNING or p.status() == psutil.STATUS_SLEEPING:
                     print("killing process: ", p)
                     p.send_signal(sig)
             except psutil.TimeoutExpired as e:
@@ -49,7 +49,7 @@ class PS_Util:
         # Wait for processes to terminate
         for p in children:
             try:
-                if p.status() == psutil.STATUS_RUNNING:
+                if p.status() == psutil.STATUS_RUNNING or p.status() == psutil.STATUS_SLEEPING:
                     print(f"Waiting for process {p} to terminate...")
                     p.wait(timeout=wait_timeout)
             except psutil.TimeoutExpired:
