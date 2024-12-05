@@ -45,7 +45,7 @@ class PS_Util:
                 print("Error: ", e)
                 pass
         
-        wait_timeout = 0.1
+        wait_timeout = 30
         # Wait for processes to terminate
         for p in children:
             try:

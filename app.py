@@ -5,7 +5,7 @@ import os
 
 def run_tests():
     result_path = "results"
-    logging_name = "test-one"
+    logging_name = "test_one"
     suite_name = "test_one"
     log_file_path = os.path.join(result_path, f"{logging_name}.txt")
     
@@ -21,8 +21,10 @@ def run_tests():
         '-v',                               # Verbose output
         f'--log-file={os.path.join(result_path, f"{logging_name}.log")}',  # Log file
         f'--junitxml={os.path.join(result_path, f"{logging_name}.xml")}',  # JUnit XML output
-        f'-o junit_suite_name={suite_name}',  # Suite name in JUnit report
-        '-o junit_family=xunit1',            # JUnit family
+        '-o',
+        f'junit_suite_name={suite_name}',  # Suite name in JUnit report
+        '-o',
+        f'junit_family=xunit1',            # JUnit family
         f'--capture=no',                 # Capture output and write it to sys.stdout and log file
     ]
     
