@@ -45,7 +45,7 @@ class PS_Util:
                 print("Error: ", e)
                 pass
         
-        wait_timeout = 30
+        wait_timeout = 0.1
         # Wait for processes to terminate
         for p in children:
             try:
@@ -53,7 +53,8 @@ class PS_Util:
                     print(f"Waiting for process {p} to terminate...")
                     p.wait(timeout=wait_timeout)
             except psutil.TimeoutExpired:
-                print(f"Process {p} did not terminate within {wait_timeout} seconds.")
+                print(f"Process {p} did not terminate within {wait_timeout} seconds., killing it")
+                p.kill()
             except psutil.NoSuchProcess:
                 print(f"Process {p} already exited.")
             except KeyboardInterrupt as e:
