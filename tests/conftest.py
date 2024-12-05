@@ -3,24 +3,25 @@ import signal
 
 import pytest
 
-
 def pytest_runtest_makereport(item, call):
+    # Create the report from the test item and call
     report = pytest.TestReport.from_item_and_call(item, call)
-    if report.when == "call" and report.failed and os.environ.get('TEST_TIMEOUT') == "True":
-        # Customize the failure message
-        custom_message = f"Custom Failure: {str(os.environ.get('XML_TAG_ROOT_CAUSE'))}"
+    
+    # Check for the 'setup' phase
+    if call.when == "setup" and call.excinfo is not None and os.environ.get('TEST_TIMEOUT') == "True":
+        # Customize the failure message for setup failures
+        custom_message = f"Test ran for abnormally long time, please check attached logs for details"
         report.longrepr = custom_message  # Override the long failure message
+        
+    # Check for test call failures and custom timeout logic
+    elif call.when == "call" and report.failed and os.environ.get('TEST_TIMEOUT') == "True":
+        # Customize the failure message for test call failures with a timeout
+        custom_message = f"Test ran for abnormally long time, please check attached logs for details"
+        report.longrepr = custom_message  # Override the long failure message
+    
     return report
 
-# def pytest_runtest_logreport(report):
-#     if report.when == "call" and report.failed:
-#         # Add a custom XML attribute for failures
-#         report.custom_failure_message = "Customized failure message."
 
-# def pytest_record_xml_attribute(report, key, value):
-#     # Customize or override attributes for the XML
-#     if report.when == "call" and report.failed and key == "message":
-#         return report.custom_failure_message  # Inject the custom message
 
 
 def handle_signal(signum, frame):
